@@ -14,8 +14,9 @@ local tacvi_raid = {
 }
 
 function event_say(e) 
+  local tacvi_flag = tonumber(e.other:GetAccountBucket("god.flags.tacvi")) or 0
 	if e.message:findi("hail") then
-		if e.other:HasItem(64034) then
+		if e.other:HasItem(64034) or tacvi_flag == 1 then
 			e.self:Say("You hold a Signet of Command! I can use the power of the signet to [" .. eq.say_link("open the way") .. "] for you to the upper reaches of the temple once you are prepared to face the Tunat'Muram.");
 		else
 			--#if don't have signet of command		
@@ -32,13 +33,16 @@ function event_say(e)
 	elseif e.message:findi("open the way") then
 		local is_gm = e.other:GetGM();
 
-		if e.other:HasItem(64034) then
+		if e.other:HasItem(64034) or tacvi_flag == 1 then
 			if not is_gm and e.other:DoesAnyPartyMemberHaveLockout(tacvi, "Replay Timer", 54) then
 				e.other:Message(MT.NPCQuestSay, "Hamari Nedu says, 'I'm afraid I cannot allow you to begin, someone in your party has been on this expedition too recently and cannot yet go again.'")
 			else
 				e.other:Message(MT.NPCQuestSay, "Hamari Nedu says, 'Place your hands on one of the altars behind me and the way will be revealed. Be wary for you are about to encounter some of the most vicious trusik known. If for any reason you wish to return, place your hands on the golem within the temple.'");
 				local dz = e.other:CreateExpedition(tacvi_raid)
-				-- dz:AddReplayLockout(eq.seconds("22h"));
+			  dz:AddReplayLockout(eq.seconds("14h"));
+        if tacvi_flag == 0 then
+          e.other:SetAccountBucket("god.flags.tacvi", "1")
+        end
 			end
 		end
 	end

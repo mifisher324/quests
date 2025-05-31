@@ -159,6 +159,7 @@ end
 
 
 function Waveone_Signal(e)
+  e.self:Say("What is this? How dare you fools enter this sacred place and interrupt my ritual. Minions of the legion! Show these infidels what they have gotten themselves into!");
 	e.self:SetSpecialAbility(35, 0); --turn off immunity
 	e.self:SetSpecialAbility(24, 0); --turn off anti aggro
 end
