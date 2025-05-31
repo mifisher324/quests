@@ -31,9 +31,17 @@ function event_timer(e)
 		  end
 		);
 		e.self:Emote("tosses its foes away wildly!");
-				e.self:CastedSpellFinished(4185, e.self:GetHateRandom());	-- Spell: Throw
-				e.self:CastedSpellFinished(4185, e.self:GetHateRandom());	-- Spell: Throw
-				e.self:CastedSpellFinished(4185, e.self:GetHateRandom());	-- Spell: Throw
+    hate_list = e.self:CountHateList();
+    if (hate_list ~= nil and tonumber(hate_list) == 1) then
+      e.self:CastedSpellFinished(4185, e.self:GetHateTop());	-- Spell: Throw
+    elseif (hate_list ~= nil and tonumber(hate_list) == 2) then
+      e.self:CastedSpellFinished(4185, e.self:GetHateTop());	-- Spell: Throw
+      e.self:CastedSpellFinished(4185, e.self:GetHateRandom()); -- Spell: Throw
+    elseif (hate_list ~= nil and tonumber(hate_list) >= 3) then
+      e.self:CastedSpellFinished(4185, e.self:GetHateTop());	-- Spell: Throw
+      e.self:CastedSpellFinished(4185, e.self:GetHateRandom()); -- Spell: Throw
+      e.self:CastedSpellFinished(4185, e.self:GetHateRandom()); -- Spell: Throw
+    end
 		elseif (rand < 85) and (rand >= 70) then -- 15 % to cast manabolt
 			e.self:Emote("lets loose a bolt of energy toward his enemy!");
 				e.self:CastedSpellFinished(1046, e.self:GetHateRandom());	-- Spell: Manabolt

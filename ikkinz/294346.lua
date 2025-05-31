@@ -1,5 +1,5 @@
 --Ikkinz Raid #1: Chambers of Righteousness  
---spawn group 98734-98741 Crumbling_Monument (294344) adds
+--spawn group 98734-98741 Crumbling_Monument (294346) adds
 
 function event_signal(e)
   local guardian = eq.get_entity_list():GetMobByNpcTypeID(294341)

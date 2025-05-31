@@ -7,7 +7,7 @@ sub EVENT_SAY {
 	"  Only they will understand the calling and only they can do what is necessary to proceed.  If there be anyone who matches my ambitions, step forward to [" . quest::saylink("answer the challenge") . "].");
   }
   if ($text=~/challenge/i) {
-	if ($client->HasClass("Cleric") || $client->HasClass("Druid") || $client->HasClass("Shaman")  || $status >= 80) {
+	if ($client->HasClass("Cleric") || $client->HasClass("Druid") || $client->HasClass("Shaman")) {
 		$client->Message(0,"You are a priest. It is your ability -- in fact, your very calling -- that requires you to be able to manipulate it. You must sew these together and return to me the product so that I can verify the truth in your words and in your soul.");
 		quest::summonitem(60241); # Item: Dried Segment of Flesh
 		quest::summonitem(60241); # Item: Dried Segment of Flesh
@@ -15,7 +15,11 @@ sub EVENT_SAY {
 		quest::summonitem(60241); # Item: Dried Segment of Flesh
 	}
 	else {
-		$client->Message(0,"You are not of a similar mind as me. You will not understand the hardships. Be gone.");
+		$client->Message(0,"Although you are not of similar mind to me, let us see if you can rise to the occasion.");
+		quest::summonitem(60241); # Item: Dried Segment of Flesh
+		quest::summonitem(60241); # Item: Dried Segment of Flesh
+		quest::summonitem(60241); # Item: Dried Segment of Flesh
+		quest::summonitem(60241); # Item: Dried Segment of Flesh
 	}
   }
  if ($text=~/north/i) {

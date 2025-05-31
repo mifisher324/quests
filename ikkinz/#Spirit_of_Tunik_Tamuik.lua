@@ -38,8 +38,10 @@ function event_timer(e)
 
 	if (check_type.valid and check_type:IsClient() and not check_type:IsPet()) then
 		local check_type_v = check_type:GetRace();
+    local check_type_g = check_type:GetGender();
 			--if (check_type_v.valid) then
 				e.self:SetRace(check_type_v);
+        e.self:SetGender(check_type_g);
     if check_type:GetClass() == Class.BEASTLORD or check_type:GetClass() == Class.BARD  or check_type:GetClass() == Class.SHADOWKNIGHT  or check_type:GetClass() == Class.RANGER  or check_type:GetClass() == Class.PALADIN then
       spell_set = 1; --hybrid
     elseif check_type:GetClass() == Class.CLERIC  or check_type:GetClass() == Class.DRUID  or check_type:GetClass() == Class.SHAMAN then
@@ -58,9 +60,9 @@ function event_timer(e)
           elseif (rand < 85) and (rand >= 70) then -- 15 % to cast
             e.self:CastedSpellFinished(5005, e.self:GetHateRandom()); -- Tamuik's Ghastly Presence (5005)
             e.self:Emote("instills fright in his foe with his ghastly presence.");
-          elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
-            e.self:CastedSpellFinished(5006, e.self:GetHateRandom()); -- Tamuik's Spectral Step (5006)
-            e.self:Say("Time has no meaning when you live as a ghost does!");
+          --elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
+            --e.self:CastedSpellFinished(5006, e.self:GetHateRandom()); -- Tamuik's Spectral Step (5006)
+            --e.self:Say("Time has no meaning when you live as a ghost does!");
           end
       elseif (spell_set == 2) then
           local rand = math.random(1,100);
@@ -70,9 +72,9 @@ function event_timer(e)
           elseif (rand < 85) and (rand >= 70) then -- 15 % to cast
             e.self:CastedSpellFinished(5007, e.self:GetHateRandom()); -- Curse of Tunik Tamuik (5007)
             e.self:Emote("Now you will suffer the baleful existence I know!");
-          elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
-            e.self:CastedSpellFinished(5008, e.self:GetHateRandom()); -- Bane of Tunik Tamuik (5008)
-            e.self:Say("Now you will suffer the baleful existence I know!");
+          --elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
+            --e.self:CastedSpellFinished(5008, e.self:GetHateRandom()); -- Bane of Tunik Tamuik (5008)
+            --e.self:Say("Now you will suffer the baleful existence I know!");
           end
 	elseif (spell_set == 3) then
           local rand = math.random(1,100);
@@ -82,9 +84,9 @@ function event_timer(e)
           elseif (rand < 85) and (rand >= 70) then -- 15 % to cast
             e.self:CastedSpellFinished(5002, e.self:GetHateRandom()); -- Manablast (5002)
             e.self:Emote("Assaults his foe with a blast of tainted mana!");
-          elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
-            e.self:CastedSpellFinished(5004, e.self:GetHateRandom()); -- Tamuik's Suggestion (5004)
-            e.self:Say("You! You're mine to control now!");
+          -- elseif (rand < 70) and (rand >= 55) then -- 15 % to cast
+            -- e.self:CastedSpellFinished(5004, e.self:GetHateRandom()); -- Tamuik's Suggestion (5004)
+            -- e.self:Say("You! You're mine to control now!");
           end
 	elseif (spell_set == 4) then
 			-- does nothing
