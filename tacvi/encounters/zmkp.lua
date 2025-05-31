@@ -226,8 +226,8 @@ function ZMKP_Hp_Balance(e)
 			rage_balanced = true;
 		end
 		eq.get_entity_list():MessageClose(e.self, false, 120, MT.Yellow, e.self:GetCleanName() .. " seems to be tipping in your favor.");
-		eq.set_next_hp_event(target_hp - 3)
-	elseif e.hp_event == (target_hp - 3) then
+		eq.set_next_hp_event(target_hp - 20) --Changed from 3%
+	elseif e.hp_event == (target_hp - 20) then
 		local id = e.self:GetNPCTypeID();
 		if id == 298125 then
 			speed_balanced = false;
