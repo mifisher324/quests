@@ -11,10 +11,8 @@ function event_combat(e)
 end
 
 function event_timer(e)
-eq.debug("timer")
 if (e.timer == "random") then
   local rand = math.random(1,100);
-  eq.debug(tostring(rand))
 	if (rand >= 85) then -- 15 % to cast throw
 		local instance_id = eq.get_zone_instance_id();
 		e.self:ForeachHateList(

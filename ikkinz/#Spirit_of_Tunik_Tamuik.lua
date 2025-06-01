@@ -7,7 +7,12 @@
 --local spell_setfour = false; --pure melee
 
 spell_set = 0;
-     
+require("bit")
+function has_class(e, class_id)
+  local char_bm = e:GetClassBitmask()
+  return bit.band(char_bm, 2^class_id) == 2^class_id
+end
+
 function event_death_complete(e)
    eq.spawn2(294579,0,0,-126,-919,-3,508); -- NPC: a_pile_of_bones
    eq.spawn2(294579,0,0,-124,-855,-3,260); -- NPC: a_pile_of_bones
@@ -36,21 +41,26 @@ function event_timer(e)
 	  if (check_type.valid and check_type:IsClient() and not check_type:IsPet()) then
 		  local check_type_v = check_type:GetRace();
       local check_type_g = check_type:GetGender();
+      local el = eq.get_entity_list()
+      local hate_top = el:GetClientByID(check_type:GetID())
 		  e.self:SetRace(check_type_v);
       e.self:SetGender(check_type_g);
-      if check_type:GetClass() == Class.BEASTLORD or check_type:GetClass() == Class.BARD  or check_type:GetClass() == Class.SHADOWKNIGHT  or check_type:GetClass() == Class.RANGER  or check_type:GetClass() == Class.PALADIN then
+      if has_class(hate_top, Class.BEASTLORD) or has_class(hate_top, Class.BARD) or has_class(hate_top, Class.SHADOWKNIGHT) or has_class(hate_top, Class.RANGER) or has_class(hate_top, Class.PALADIN) then
         spell_set_1 = true; --hybrid
-      elseif check_type:GetClass() == Class.CLERIC  or check_type:GetClass() == Class.DRUID  or check_type:GetClass() == Class.SHAMAN then
+      end
+      if has_class(hate_top, Class.CLERIC) or has_class(hate_top, Class.DRUID) or has_class(hate_top, Class.SHAMAN) then
         spell_set_2 = true; --priest
-      elseif check_type:GetClass() == Class.NECROMANCER  or check_type:GetClass() == Class.WIZARD  or check_type:GetClass() == Class.MAGICIAN  or check_type:GetClass() == Class.ENCHANTER then
+      end
+      if has_class(hate_top, Class.NECROMANCER) or has_class(hate_top, Class.WIZARD) or has_class(hate_top, Class.MAGICIAN) or has_class(hate_top, Class.ENCHANTER) then
         spell_set_3 = true; --int
-      elseif check_type:GetClass() == Class.WARRIOR  or check_type:GetClass() == Class.MONK  or check_type:GetClass() == Class.ROGUE  or check_type:GetClass() == Class.BERSERKER then
+      end
+      if has_class(hate_top, Class.WARRIOR) or has_class(hate_top, Class.MONK) or has_class(hate_top, Class.ROGUE) or has_class(hate_top, Class.BERSERKER) then
         spell_set_4 = true; --pure melee
       end
 	  end
     local rand = math.random(1, 100);
     local spell_list = {}
-    if rand >= 85 then --50% chance to cast something
+    if rand >= 25 then --75% chance to cast something
       if spell_set_1 then
         table.insert(spell_list, 36930) -- Tunik's Deadly Lifetap
         table.insert(spell_list, 5005) -- Tamuik's Ghastly Presence
@@ -74,7 +84,7 @@ function event_timer(e)
       elseif spell_cast == 5005 then
         e.self:Emote("instills fright in his foe with his ghastly presence.")
       elseif spell_cast == 5009 then
-        e.self:Emote("unleashes an unholy harrage upon his opponent!")
+        e.self:Emote("unleashes an unholy barrage upon his opponent!")
       elseif spell_cast == 5007 then
         e.self:Say("Now you will suffer the baleful existence I know!")
       elseif spell_cast == 5003 then
