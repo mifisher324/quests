@@ -4,6 +4,8 @@
 function event_spawn(e)
 	eq.set_timer("hpflux", 36 * 1000);
 	eq.set_next_hp_event(4);
+  e.self:SetSpecialAbility(35, 1) --Turn on immunity
+  e.self:SetPseudoRoot(true)
 end
 
 function event_hp(e)
@@ -22,6 +24,13 @@ function event_combat(e)
 		eq.stop_timer("OOBcheck");
 		eq.set_timer("hpflux", 5 * 1000);
 	end
+end
+
+function event_signal(e)
+  if e.signal == 2 then
+    e.self:SetSpecialAbility(35, 0) --Turn off immunity
+    e.self:SetPseudoRoot(false)
+  end
 end
 
 

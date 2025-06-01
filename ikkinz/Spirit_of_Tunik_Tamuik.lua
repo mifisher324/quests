@@ -20,3 +20,8 @@ function event_trade(e)
 	end
 	item_lib.return_items(e.self, e.other, e.trade)
 end
+
+function event_spawn(e)
+  e.self:SetSpecialAbility(35, 1) --Turn on immunity
+  e.self:SetSpecialAbility(24, 1) --Turn on anti-agro
+end

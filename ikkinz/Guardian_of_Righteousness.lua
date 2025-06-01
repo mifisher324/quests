@@ -25,7 +25,7 @@ if (e.timer == "random") then
 			end
 		  end
 		);
-		e.self:Emote("motions toward three attackers and throws them wildly around!");
+		e.self:Emote("motions toward his attackers and throws some wildly around!");
 			hate_list = e.self:CountHateList();
     			if (hate_list ~= nil and tonumber(hate_list) == 1) then
 				e.self:CastedSpellFinished(4185, e.self:GetHateTop());	-- Spell: Throw
@@ -44,13 +44,13 @@ if (e.timer == "random") then
 				if (rand == 1) then
 					eq.signal(294344,1)
 				elseif (rand == 2) then
-					eq.signal(294344,2)
+					eq.signal(294345,2)
 				elseif (rand == 3) then
-					eq.signal(294344,3)
+					eq.signal(294346,3)
 				elseif (rand == 4) then
-					eq.signal(294344,4)
+					eq.signal(294346,4)
 				elseif (rand == 5) then
-					eq.signal(294344,5)
+					eq.signal(294346,5)
 				elseif (rand == 6) then
 					eq.signal(294344,6)
 				elseif (rand == 7) then

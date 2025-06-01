@@ -128,6 +128,7 @@ function event_death_complete(e)
 	eq.depop_all(223228);
 	eq.spawn2(223213,0,0,175,-1205,5.0,385.5);
 	eq.spawn2(223214,0,0,-579,-1119,60.625,0);
+        eq.get_zone():SetVariable("Phase", "6")
 	-- load the current quest globals
 	local qglobals = eq.get_qglobals();
 
