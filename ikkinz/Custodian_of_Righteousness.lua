@@ -2,6 +2,8 @@
 
 function event_spawn(e)
 	eq.set_next_hp_event(50);
+  e.self:SetSpecialAbility(35, 1) --Turn on immunity
+  e.self:SetSpecialAbility(24, 1) --Turn on anti-agro
 end
 
 function event_hp(e)
@@ -29,6 +31,11 @@ eq.stop_timer("blur");
 end
 end
 
+function event_signal(e)
+  e.self:SetSpecialAbility(35, 0) --Turn off immunity
+  e.self:SetSpecialAbility(24, 0) --Turn off anti-agro
+end
+
 
 function event_timer(e)
 	if(e.timer=="OOBcheck") then
@@ -43,12 +50,5 @@ function event_timer(e)
 	elseif(e.timer=="blur") then
 		e.self:Emote("shifts its weight and turns its attention to someone new.");
 		e.self:WipeHateList();
-	end
-end
-
-function event_death_complete(e)
-	local dz = eq.get_expedition()
-	if dz.valid then
-		dz:AddReplayLockoutDuration(eq.seconds("2h"))
 	end
 end
