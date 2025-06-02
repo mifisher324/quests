@@ -44,7 +44,6 @@ function event_death_complete(e)
 	eq.spawn2(294598,0,0,531,-157,-50,252); -- NPC: #Vrex_Xalkak`s_Sentinel
 	eq.spawn2(294599,0,0,522,-233,-50,136); -- NPC: #Vrex_Xalkak`s_Sentinel_
 	eq.spawn2(294600,0,0,516,-182,-50,136); -- NPC: Vrex_Xalkak`s_Sentinel_
-	eq.signal(294631,5); -- set lockout
 	eq.zone_emote(MT.White,"The death of the Guardian of Transcendence reveals a trusik geomancer! It appears he was the guardian all along and used his phenomenal abilities to lure you into his den!");
 	eq.zone_emote(MT.White,"Vrex Xalkak Nixki says, 'I won't be defeated so easily! Come forth, my sentinels! Your time to work is at hand!'");
 end

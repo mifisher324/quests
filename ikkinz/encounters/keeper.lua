@@ -136,7 +136,6 @@ function KeeperDeath(e)
 	eq.spawn2(294621,0,0,937,14,-72,400); -- NPC: a_pile_of_bones
 	eq.spawn2(294621,0,0,908,111,-73,300); -- NPC: a_pile_of_bones
 	eq.spawn2(294621,0,0,685,1,-73,114); -- NPC: a_pile_of_bones
-	eq.signal(294631,8); --set lockout
 	eq.zone_emote(MT.NPCQuestSay,"The Keeper of the Altar has been defeated! You have found a way do what even the trusik priests of old had trouble with." ..
 	"You are well on your way to uncovering the secrets that Txevu has holed up inside its walls. Congratulations!");
 	eq.ZoneMarquee(10,510,1,1,6000,"The Keeper of the Altar has been defeated! Congratulations!");
