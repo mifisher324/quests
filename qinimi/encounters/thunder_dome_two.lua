@@ -2,6 +2,7 @@
 
 local player_limit					=	18;
 local zone_id						=	eq.get_zone_id();
+local started = false;
 -- Mob IDs
 local thunderdome_controller		=	281164; --
 local mass_of_stone					=	281076; -- 
@@ -106,16 +107,19 @@ function init_event(e)
 	deaths			=	0;	-- Ensure deaths = 0
 	boss_counter	=	4;	-- Ensure boss_counter = 4
 	eq.spawn2(thunderdome_controller,0,0,unpack(center_loc));	-- TD_Status
-	eq.signal(thunderdome_controller,10);
+  eq.signal(thunderdome_controller,10);
 end
 
 function td_signal(e)
 	if(e.signal == 10) then
-		eq.set_timer("fail_1", 10 * 60 * 1000);		-- 10 minute first phase fail timer
-		eq.set_timer("fail_2", 27 * 60 * 1000);		-- 27 minute total fail timer
-		eq.set_timer("Wave_1", 5 * 1000);			-- 5s to start event
-		eq.set_timer("Wave_2", 60 * 1000);			-- 1 Minute to wave 2
-		eq.set_timer("Wave_3", 3 * 60 * 1000);		-- 1 Minutes to wave 3
+    if not started then
+      started = true
+      eq.set_timer("fail_1", 10 * 60 * 1000);		-- 10 minute first phase fail timer
+      eq.set_timer("fail_2", 27 * 60 * 1000);		-- 27 minute total fail timer
+      eq.set_timer("Wave_1", 5 * 1000);			-- 5s to start event
+      eq.set_timer("Wave_2", 60 * 1000);			-- 1 Minute to wave 2
+      eq.set_timer("Wave_3", 3 * 60 * 1000);		-- 1 Minutes to wave 3
+    end
 	elseif(e.signal == 20) then
 		eq.set_timer("port_out", 5 * 60 * 1000);	-- How long until port out?
 	elseif(e.signal == 99) then

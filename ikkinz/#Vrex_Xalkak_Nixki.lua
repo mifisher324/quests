@@ -63,7 +63,6 @@ function event_death_complete(e)
 	eq.spawn2(294596,0,0,556,-266,-50,486); -- NPC: a_pile_of_bones
 	eq.spawn2(294596,0,0,618,-232,-50,4); -- NPC: a_pile_of_bones
 	--should be based on number of players in zone
-	eq.signal(294631,6); --set lockout
 	eq.zone_emote(MT.White,"Vrex Xalkak Nixki has been defeated! The whole time you were led to believe that this guardian was just another stone sentinel left as a test by the trusik priests of the past. Congratulations on a most difficult task indeed!");
 	eq.ZoneMarquee(10,510,1,1,6000,"Vrex Xalkak Nixki has been defeated! Congratulations!");
 end

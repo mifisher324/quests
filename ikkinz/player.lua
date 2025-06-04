@@ -1,9 +1,3 @@
-function event_enter_zone(e)
-	if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(227074) then
-		eq.spawn2(294631,0,0,0,0,0,0); -- NPC: lockout_ikkinz
-	end
-end
-
 -- door pairs in order encountered (right and left sliding door ids)
 local first_door   = { [15] = true, [16] = true }
 local second_door  = { [2] = true, [3] = true }

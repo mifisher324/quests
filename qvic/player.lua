@@ -9,12 +9,16 @@ end
 
 function event_click_door(e)
 	local door_id = e.door:GetDoorID();
+  local txevu_flag = tonumber(e.self:GetAccountBucket("god.flags.txevu")) or 0
 	--Txevu
 	if (door_id == 2) then
-		if(e.self:HasItem(60254)) then
+		if e.self:HasItem(60254) or txevu_flag == 1 then
 			if not e.self:HasZoneFlag(297) then
 				e.self:SetZoneFlag(297);
 			end
+      if txevu_flag == 0 then
+        e.self:SetAccountBucket("god.flags.txevu", "1")
+      end
 		end
 		--allow a GM to pull in a raid to test
 		local raid = e.self:GetRaid();

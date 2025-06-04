@@ -96,7 +96,6 @@ function event_timer(e)
 end
 
 function event_death_complete(e)
-	eq.signal(294631,4); -- NPC: lockout_ikkinz
 	eq.spawn2(294585, 0, 0, e.self:GetX(), e.self:GetY(),  e.self:GetZ(),  e.self:GetHeading()); --NPC: a_pile_of_bones
 end
 

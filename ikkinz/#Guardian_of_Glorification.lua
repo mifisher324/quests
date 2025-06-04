@@ -5,19 +5,14 @@ local reduce_dmg = 0;
 local reduce_hp = 0;
 
 function event_spawn(e)
-	eq.set_next_hp_event(90);
+	eq.set_next_hp_event(50);
 	reduce_regen = 0;
 	reduce_dmg = 0;
 	reduce_hp = 0;
 end
 
 function event_hp(e)
-	if(e.hp_event == 90) then
-		eq.signal(294474,1); --Glorified_Bolsterer remove immunity
-		eq.signal(294475,1); --Glorified_Bolsterer remove immunity
-		eq.signal(294478,1); --Glorified_Bolsterer remove immunity
-		eq.set_next_hp_event(50);
-	elseif(e.hp_event == 50) then
+	if(e.hp_event == 50) then
 		eq.zone_emote(MT.White, "Guardian of Glorification splits into two smaller stone workers!");
 		eq.spawn2(294583,0, 0, e.self:GetX(), e.self:GetY(),  e.self:GetZ(),  e.self:GetHeading()); -- NPC: ##Guardian_of_Glorification
 		eq.spawn2(294583,0, 0, e.self:GetX(), e.self:GetY(),  e.self:GetZ(),  e.self:GetHeading()); -- NPC: ##Guardian_of_Glorification
@@ -52,7 +47,13 @@ end
 function event_combat(e)
 	if(e.joined) then
 		eq.set_timer("random", 5 * 1000);
-	else
+    e.self:SetPseudoRoot(true)
+		eq.signal(294474,1); --Glorified_Bolsterer remove immunity
+		eq.signal(294475,1); --Glorified_Bolsterer remove immunity
+		eq.signal(294478,1); --Glorified_Bolsterer remove immunity
+    eq.zone_emote(MT.Yellow, "The Glorified Bolsterers blow a long note on their horns, and the Guardian of Glorification begins to glow with enhanced destructive energies!")
+    eq.zone_marquee(MT.Yellow, "The Glorified Bolsterers blow a long note on their horns.")
+  else
 		eq.stop_timer("random");
 	end
 end

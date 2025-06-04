@@ -1,19 +1,7 @@
+task_ids = require('task_ids')
 -- items: 68298
 local turned_in_seal = false
 local tool_count = 0
-
-local function update_flag(client)
-  local sewers_flag = tonumber(eq.get_data(client:CharacterID() .. "-god_sewers")) or 0
-  local snlair_key = string.format("%s-god_snlair", client:CharacterID())
-
-  if sewers_flag < 3 then
-    eq.set_data(snlair_key, "T")
-    client:Message(MT.Yellow, "You have gained a temporary character flag!  Seek the High Priest's Scribe to find out more information.")
-  else
-    eq.set_data(snlair_key, "1")
-    client:Message(MT.Yellow, "You have gained a character flag!  All of High Priest Diru's tasks have been completed.  He will now tell you who to talk to for passage through the mountains.")
-  end
-end
 
 function event_spawn(e)
   e.self:SetSpecialAbility(SpecialAbility.immune_melee, 1)
@@ -46,7 +34,11 @@ function event_say(e)
       local client_list = eq.get_entity_list():GetClientList()
       for client in client_list.entries do
         if client.valid then
-          update_flag(client)
+          client:UpdateTaskActivity(task_ids.lair_task, 5, 1)
+          client:UpdateTaskActivity(task_ids.sewers_task, 2, 1)
+          if client:IsTaskCompleted(task_ids.sewers_task) then
+            e.other:SetAccountBucket("god.flags.sewers", "1")
+          end
         end
       end
 

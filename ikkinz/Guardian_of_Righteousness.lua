@@ -12,8 +12,8 @@ end
 
 function event_timer(e)
 if (e.timer == "random") then
-local rand = math.random(1,100);
-		if (rand >= 85) then -- 15 % to cast throw
+  local rand = math.random(1,100);
+	if (rand >= 85) then -- 15 % to cast throw
 		local instance_id = eq.get_zone_instance_id();
 		e.self:ForeachHateList(
 		  function(ent, hate, damage, frenzy)
@@ -65,14 +65,5 @@ end
 
 function event_death_complete(e)
 	eq.signal(294342,1); -- NPC: Crumbling_Monolith
-	eq.signal(294631,1); --set lockout
 	eq.get_entity_list():FindDoor(11):SetLockPick(0);
-
-	
-	local dz = eq.get_expedition()
-	if dz.valid then
-		dz:AddReplayLockoutDuration(eq.seconds("2h"))
-	end
 end
-
-

@@ -1,4 +1,5 @@
 local tool_event_started = false
+local task_ids = require('task_ids')
 
 local spirits = {
   286005, -- a_Nihil_priest_spirit
@@ -159,10 +160,20 @@ local function trigger_spawn(e)
   tool_event_started = true
 end
 
+local function update_task(task_activity)
+  local client_list = eq.get_entity_list():GetClientList()
+  for client in client_list.entries do
+    if client.valid then
+      client:UpdateTaskActivity(task_ids.lair_task, task_activity, 1)
+    end
+  end
+end
+
 local function spirit_death(e)
   if tool_event_started and e.self:EntityVariableExists("has_tools") then -- waterwheel room
     eq.signal(286098, 1) -- NPC: Alej Leraji
     eq.zone_emote(MT.Yellow, "As the nihil spirit falls, you catch a glimpse of an item in the corner of the room. You have acquired [" .. eq.say_link("Alej's Stone Breaking Powder Bag") .. "].")
+    update_task(2)
   end
 end
 
@@ -170,6 +181,7 @@ local function sludgeworker_death(e)
   if tool_event_started and e.self:EntityVariableExists("has_tools") then -- zone-in room
     eq.signal(286098, 1) -- NPC: Alej Leraji
     eq.zone_emote(MT.Yellow, "You hear a large thud as the golem crashes down on the hard stone floor. As the dust settles, a sparkle of an item appears in the front of the room. You have acquired [" .. eq.say_link("Alej's Stone Melding Orb") .. "].")
+    update_task(3)
   end
 end
 
@@ -177,6 +189,7 @@ local function insect_death(e)
   if tool_event_started and e.self:EntityVariableExists("has_tools") then -- cocoon room
     eq.signal(286098, 1) -- NPC: Alej Leraji
     eq.zone_emote(MT.Yellow, "The bug falls to the ground, revealing an item that seemed like it wasn't there before. You have acquired [" .. eq.say_link("Alej's Stone Shaping Sceptre") .. "].")
+    update_task(4)
   end
 end
 

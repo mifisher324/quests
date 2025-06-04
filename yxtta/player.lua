@@ -163,3 +163,14 @@ function ask_question(e)
 		e.self:Message(MT.Yellow, question_dialog[expected_door][math.random(1,3)]);	-- Provide text for next door
 	end
 end
+
+function event_enter_zone(e)
+  qvic_flag = tonumber(e.self:GetAccountBucket("god.flags.qvic")) or 0
+  if not e.self:HasZoneFlag(Zone.qvic) then
+    if (e.self:HasItem(60176) and e.self:HasItem(60252)) or qvic_flag == 1 then
+      e.self:SetZoneFlag(Zone.qvic)
+      e.self:SetAccountBucket("god.flags.qvic", "1")
+      e.self:Message(MT.LightBlue, "The magical barrier protecting Qvic appears to have weakened, allowing access.")
+    end
+  end
+end

@@ -43,9 +43,5 @@ end
 
 function event_death_complete(e)
   eq.signal(294141,1); -- NPC: #Trigger_Ikkinz_1
-
-  local dz = eq.get_expedition()
-  if dz.valid then
-	  dz:AddReplayLockoutDuration(eq.seconds("2h"))
-  end
+  eq.signal(294141,10); -- NPC: #Trigger_Ikkinz_1
 end
