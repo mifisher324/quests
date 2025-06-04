@@ -1,30 +1,54 @@
 task_ids = require('task_ids')
+local ikk1_zoner = eq.get_entity_list():GetMobByNpcTypeID(293229)
+local righteous_coord = { zone="kodtaz", x=ikk1_zoner:GetX(), y=ikk1_zoner:GetY(), z=ikk1_zoner:GetZ(), h=ikk1_zoner:GetHeading() }
 local righteous_info = {
   expedition = { name="Ikkinz, Chambers of Righteousness", min_players=1, max_players=6 },
   instance = { zone="ikkinz", version=3, duration=eq.seconds("13h") },
-  compass = { zone="kodtaz", x=1340, y=-710, z=-433 },
+  compass = righteous_coord,
   safereturn = { zone="kodtaz", x=1279, y=-2004, z=-349.375, h=336 },
-  zonein = { x=1340, y=710, z=-433, h=256 },
+  zonein = righteous_coord, 
 }
+local ikk2_zoner = eq.get_entity_list():GetMobByNpcTypeID(293230)
+local glorious_coord = { zone="kodtaz", x=ikk2_zoner:GetX(), y=ikk2_zoner:GetY(), z=ikk2_zoner:GetZ(), h=ikk2_zoner:GetHeading() }
 local glorious_info = {
   expedition = { name="Ikkinz, Chambers of Glorification", min_players=1, max_players=6 },
   instance = { zone="ikkinz", version=4, duration=eq.seconds("13h") },
-  compass = { zone="kodtaz", x=2656, y=442, z=-396 },
+  compass = glorious_coord,
   safereturn = { zone="kodtaz", x=1279, y=-2004, z=-349.375, h=336 },
-  zonein = { x=2656, y=442, z=-396, h=256 },
+  zonein = glorious_coord,
 }
+local ikk3_zoner = eq.get_entity_list():GetMobByNpcTypeID(293231)
+local transcend_coord = { zone="kodtaz", x=ikk3_zoner:GetX(), y=ikk3_zoner:GetY(), z=ikk3_zoner:GetZ(), h=ikk3_zoner:GetHeading() }
 local transcend_info = {
   expedition = { name="Ikkinz, Chambers of Transcendence", min_players=1, max_players=6 },
   instance = { zone="ikkinz", version=5, duration=eq.seconds("13h") },
-  compass = { zone="kodtaz", x=1573, y=1737, z=-396 },
+  compass = transcend_coord,
   safereturn = { zone="kodtaz", x=1279, y=-2004, z=-349.375, h=336 },
-  zonein = { x=1573, y=1737, z=-396, h=256 },
+  zonein = transcend_coord
 }
 
 function event_say(e)
   if e.other:IsTaskCompleted(task_ids.trusik_task) then
     if e.message:findi("hail") then
       e.other:Message(MT.NPCQuestSay, "Tublik Narwether says 'Hello again, " .. e.other:GetCleanName() .. "!  You've done great things here in Kod'taz to combat both the Trusik and the Muramites, but I suspect your journey is not yet complete.  If you wish to enter the [" .. eq.say_link("Sanctuary of the Righteous") .. "], the [" .. eq.say_link("Sanctuary of the Glorified") .. "], or the [" .. eq.say_link("Sanctuary of the Transcendent") .. "] again, just say so!'")
+    end
+    if e.message:findi('sanctuary of the righteous') then
+      local dz = e.other:CreateExpedition(righteous_info)
+      if dz.valid then
+        dz:AddReplayLockout(eq.seconds("14h"))
+      end
+    end
+    if e.message:findi('sanctuary of the glorified') then
+      local dz = e.other:CreateExpedition(glorious_info)
+      if dz.valid then
+        dz:AddReplayLockout(eq.seconds("14h"))
+      end
+    end
+    if e.message:findi('sanctuary of the transcendent') then
+      local dz = e.other:CreateExpedition(transcend_info)
+      if dz.valid then
+        dz:AddReplayLockout(eq.seconds("14h"))
+      end
     end
   elseif e.other:IsTaskActivityActive(task_ids.trusik_task, 14) or e.other:IsTaskActivityActive(task_ids.trusik_task, 15) then
     if e.message:findi("hail") then

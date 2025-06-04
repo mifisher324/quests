@@ -21,12 +21,14 @@ function event_trade(e)
 end
 
 function get_expedition(e)
+  local dz_zoner = eq.get_entity_list():GetMobByNpcTypeID(293232)
+  local dz_coord = { zone="kodtaz", x=dz_zoner:GetX(), y=dz_zoner:GetY(), z=dz_zoner:GetZ(), h=dz_zoner:GetHeading() }
   local dz_info = {
     expedition = { name="Ikkinz, Antechamber of Destruction", min_players=1, max_players=6 },
     instance = { zone="ikkinz", version=6, duration=eq.seconds("13h") },
-    compass = { zone="kodtaz", x=1860, y=660, z=-447 },
+    compass = dz_coord,
     safereturn = { zone="kodtaz", x=1279, y=-2004, z=-349.375, h=336 },
-    zonein = { x=1860, y=660, z=-447, h=0 },
+    zonein = dz_coord,
   }
   local dz = e.other:CreateExpedition(dz_info)
   if dz.valid then
