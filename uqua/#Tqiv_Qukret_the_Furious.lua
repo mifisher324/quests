@@ -74,7 +74,6 @@ end
 function event_death_complete(e)
 	eq.create_ground_object(67706,-1227,-628,-5,0,3600000); -- Item: Orb of Fury
 	eq.signal(292022,3); -- NPC: #Tqiv_Araxt_the_Enraged
-	eq.signal(292079, 1); -- NPC: lockout_uqua
 end
 
 function event_slay(e)

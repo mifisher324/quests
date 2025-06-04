@@ -1,6 +1,7 @@
 local started = false;
 local completed = false
 local count = 0;
+local warned = false;
 
 function event_spawn(e)
 	local instance_id = eq.get_zone_instance_id();
@@ -92,6 +93,11 @@ function event_enter(e)
 		eq.get_entity_list():FindDoor(9):ForceOpen(e.self);
 		eq.signal(292080,1); -- #Gas_Chamber_Cheater
 	elseif not started then
+    if not warned then
+      eq.zone_emote(MT.Yellow, "You suddenly hear the voice of Jerimo Jiao, 'Select one key, and only one key at a time, lest disaster occur.'")
+      eq.zone_marquee(MT.Yellow, "You hear the voice of Jerimo Jiao, 'Select one key and only one key at a time.'")
+      warned = true;
+    end
 		eq.set_timer("gaschamber", 12 * 1000); -- 12 seconds until door emotes begin
 	end		
 end

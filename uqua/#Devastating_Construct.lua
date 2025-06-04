@@ -1,9 +1,5 @@
 -- #Devastating_Construct(292065)
 
-function event_death_complete(e)
-	eq.signal(292079, 2); -- NPC: lockout_uqua
-end
-
 function event_slay(e)
 	if e.other:IsClient() or e.other:IsPet() then -- not sure why this is necessary, but otherwise will occasionally spawn adds when an event mob dies
 		local x,y,z,h = e.other:GetX(), e.other:GetY(), e.other:GetZ(), e.other:GetHeading();

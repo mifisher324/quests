@@ -75,7 +75,6 @@ end
 function event_death_complete(e)
 	eq.create_ground_object(67705,-537,-620,-5,2,3600000); -- Item: Orb of Rage
 	eq.signal(292021,3); -- NPC: #Tqiv_Qukret_the_Furious
-	eq.signal(292079, 1); -- NPC: lockout_uqua
 end
 
 function event_slay(e)
