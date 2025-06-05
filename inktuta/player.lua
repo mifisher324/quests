@@ -1,3 +1,4 @@
+local message_41 = false;
 function event_click_door(e)
 	local door_id = e.door:GetDoorID();
 	local entity_list = eq.get_entity_list();
@@ -13,7 +14,12 @@ function event_click_door(e)
 				-- check for the npcid of a_clay_monolith (296069)
 				if npc:GetNPCTypeID() == 296069 and not e.self:GetGM() then
 					-- set aggro on person who clicked
-					e.self:Message(MT.Red,"The door mechanism awakens the guardians standing nearby! They stumble forth to attack, dried flakes of clay raining from their ancient bodies.");
+          if not message_41 then
+					  e.self:Message(MT.Red,"The door mechanism awakens the guardians standing nearby! They stumble forth to attack, dried flakes of clay raining from their ancient bodies.");
+            message_41 = true;
+          end
+          npc:SetSpecialAbility(19, 0);
+          npc:SetSpecialAbility(20, 0);
 					npc:SetSpecialAbility(24, 0);
 					npc:SetSpecialAbility(35, 0);
 					npc:AddToHateList(e.self,1);

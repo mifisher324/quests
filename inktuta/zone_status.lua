@@ -225,10 +225,6 @@ function event_signal(e)
 
 	--Kelekdrix win
 	elseif e.signal == 296024 then
-		local dz = eq.get_expedition()
-		if dz.valid then
-			-- dz:AddReplayLockoutDuration(eq.seconds("20h"))
-		end
 		eq.spawn2(296037,0,0,-496,-912,-129.12,512); -- NPC: #Jomica_the_Unforgiven_
 		OPEN_DOOR(1);
 		
@@ -238,12 +234,8 @@ function event_signal(e)
 	elseif e.signal == 296017 then
 		OPEN_DOOR(3);
 		eq.spawn2(296072,0,0,-198,-908,-126,0);			-- NPC: #a_pile_of_bones
-		local dz = eq.get_expedition()
-		if dz.valid then
-			-- dz:AddReplayLockoutDuration(eq.seconds("20h"))
-		end
 	
-	--Noqufiel Win
+  --Noqufiel Win
 	elseif e.signal == 296065 then
 		eq.depop_all(296066)							-- NPC: #Mirror_Image_of_Noqufiel
 		eq.depop_all(296074);							-- NPC: #Noqufiel
@@ -251,10 +243,6 @@ function event_signal(e)
 		eq.spawn2(296071,0,0,-89, -615, -127, 168);		-- NPC: Jomica_the_Unforgiven
 		eq.spawn2(296067,0,0,-63,-600,-127,256);		-- NPC: #an_ancient_sentinel
 		eq.spawn2(296068,0,0,-127,-652,-127, 242);		-- NPC: #The_Bones_of_Noqufiel
-		local dz = eq.get_expedition()
-		if dz.valid then
-			-- dz:AddReplayLockoutDuration(eq.seconds("46h"))
-		end
 		eq.set_data("inktuta_status-"..eq.get_zone_instance_id(), "9",tostring(eq.seconds("6h")));
 	elseif e.signal == 296071 then
 		eq.unique_spawn(296029,0,0,5,-654,-127,350);	-- NPC: #a_pile_of_bones -- TODO LOOT SHOULD BE SPECIFIC BASED ON EVENT VARIABLES SEE BELOW
@@ -276,11 +264,6 @@ function event_timer(e)
 			eq.depop_all(296030);						-- NPC: #a_rambling_exile
 			OPEN_DOOR(2);
 			eq.spawn2(296073,0,0,-383,-536,-76,0);		-- NPC: #a_pile_of_bones_
-			local dz = eq.get_expedition()
-			if dz.valid then
-				-- dz:AddReplayLockoutDuration(eq.seconds("20h"))
-			end
-			-- AddLockout(296033);
 			eq.set_data("inktuta_status-"..eq.get_zone_instance_id(), "4",tostring(eq.seconds("6h")));
 		else
 			--Stonemite Fail - tell exiles to spawn stonemites

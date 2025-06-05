@@ -42,6 +42,7 @@ function KeleSignal(e)
 		eq.zone_emote(MT.Yellow, "Kelekdrix, Herald of Trushar laughs as her body is wrapped in a rocky protection, 'Bury them, my minions.  Offer a full demonstration of our geomantic magics.'")
 		kele:ModifyNPCStat("special_abilities",abilities_inactive);
 		kele:WipeHateList();
+    kele:SetOOCRegen(0);
 		eq.signal(296024,2,10 * 1000);
 	elseif e.signal == 2 then -- Spawn 4 adds at once (First wave)
 		eq.set_timer("adds", (90 + math.random(130)) * 1000); -- Observed 90s to 220s respawn timer
@@ -97,7 +98,6 @@ function KeleDeath(e)
 	eq.depop_all(296026);
 	eq.depop_all(296084);
 	eq.depop_all(296083);
-	eq.signal(296070, 296024);	-- setting lockout
     eq.stop_all_timers();
 end
 
