@@ -1,7 +1,7 @@
 task_ids = require('task_ids')
 function event_say(e)
   if e.message:findi('hail') then
-    e.other:Message(MT.NPCQuestSay, "Greetings, " .. e.other:GetCleanName() ..".  I've had some time to practice my enchanting and have learned how to create [" .. eq.say_link('enchanted platinum bars') .. "].  If you would like for me to create one for you, just let me know.")
+    e.other:Message(MT.NPCQuestSay, "Jeweler Imua says 'Greetings, " .. e.other:GetCleanName() ..".  I've had some time to practice my enchanting and have learned how to create [" .. eq.say_link('enchanted platinum bars') .. "].  If you would like for me to create one for you, just let me know.'")
   end
   if e.message:findi('enchanted platinum bar') then
     e.other:AssignTask(task_ids.enchanted_platinum_bar)
