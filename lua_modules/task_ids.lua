@@ -27,6 +27,7 @@ task_ids = {
   mountains_task = 31,
   vxed_task = 32,
   tipt_task = 33,
+  enchanted_platinum_bar = 34,
 };
 
 return task_ids
