@@ -11,8 +11,11 @@ end
 function event_trade(e)
   local item_lib = require("items")
 
-  if item_lib.check_turn_in(e.trade, {item1 = 16503, platinum = 5000}) then
-    e.other:UpdateTaskActivity(task_ids.enchanted_platinum_bar, 1, 1)
+
+  if e.other:IsTaskActive(task_ids.enchanted_platinum_bar) then
+    if item_lib.check_turn_in(e.trade, {item1 = 16503, platinum = 5000}) then
+      e.other:UpdateTaskActivity(task_ids.enchanted_platinum_bar, 1, 1)
+    end
   end
   item_lib.return_items(e.self, e.other, e.trade)
 end
