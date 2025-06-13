@@ -46,7 +46,6 @@ function ACMDeath(e)
 	ae = false
 	adds = false
 	combat = false
-	eq.signal(297140,297056); -- Add Lockout
 end
 
 function ACMTimer(e)
@@ -66,6 +65,8 @@ function ACMTimer(e)
 	elseif e.timer == "spawnevent" then
 		eq.stop_timer("spawnevent")
 		eq.spawn_condition("txevu", instance_id, 3, 1) -- bearers and Mastruqs
+  elseif e.timer == "absorbtion_r" then
+    eq.spawn2(
 	end
 end
 
@@ -122,26 +123,31 @@ function ACMSignal(e)
 		e.self:ModSkillDmgTaken(38, 0) -- round kick
 		e.self:ModSkillDmgTaken(52, 0) -- tiger claw
 		e.self:ModSkillDmgTaken(74, 0) -- frenzy
+    eq.set_timer("absorbtion_r", 5 * 60 * 1000)
 	elseif e.signal == 297055 then
 		e.self:SetSpecialAbility(SpecialAbility.rampage, 1)
 		e.self:SetSpecialAbilityParam(SpecialAbility.rampage, 0, 27)
 	elseif e.signal == 9297055 then
 		e.self:SetSpecialAbility(SpecialAbility.rampage, 0)
+    eq.set_timer("anger_r", 5 * 60 * 1000)
 	elseif e.signal == 297190 then
 		e.self:SetSpecialAbility(SpecialAbility.flurry, 1)
 		e.self:SetSpecialAbilityParam(SpecialAbility.flurry, 0, 50)
 	elseif e.signal == 9297190 then
 		e.self:SetSpecialAbility(SpecialAbility.flurry, 0)
+    eq.set_timer('haste_r', 5 * 60 * 1000)
 	elseif e.signal == 297051 then
 		e.self:ModifyNPCStat("min_hit", "1150")
 		e.self:ModifyNPCStat("max_hit", "4000")
 	elseif e.signal == 9297051 then
 		e.self:ModifyNPCStat("min_hit", "850")
 		e.self:ModifyNPCStat("max_hit", "2750")
+    eq.set_timer("intensification_r", 5 * 60 * 1000)
 	elseif e.signal == 297054 then
 		e.self:ModifyNPCStat("combat_hp_regen", "6000")
 	elseif e.signal == 9297054 then
 		e.self:ModifyNPCStat("combat_hp_regen", "100")
+    eq.set_timer("mending_r")
 	elseif e.signal == 297050 then
 		adds = true
 		if combat then
@@ -150,6 +156,7 @@ function ACMSignal(e)
 	elseif e.signal == 9297050 then
 		adds = false
 		eq.stop_timer("hatchling")
+    eq.set_timer("nascency_r")
 	elseif e.signal == 297208 then
 		ae = true
 		if combat then
@@ -158,19 +165,23 @@ function ACMSignal(e)
 	elseif e.signal == 9297208 then
 		ae = false
 		eq.stop_timer("ae")
+    eq.set_timer("projection_r")
 	elseif e.signal == 297142 then
 		e.self:ModifyNPCStat("attack_delay", "12")
 	elseif e.signal == 9297142 then
 		e.self:ModifyNPCStat("attack_delay", "17")
+    eq.set_timer('quickening_r')
 	elseif e.signal == 297053 then
 		e.self:SetSpecialAbility(SpecialAbility.area_rampage, 1)
 		e.self:SetSpecialAbilityParam(SpecialAbility.area_rampage, 0, 17)
 	elseif e.signal == 9297053 then
 		e.self:SetSpecialAbility(SpecialAbility.area_rampage, 0)
+    eq.set_timer('rage_r')
 	elseif e.signal == 297052 then
 		e.self:AddAISpell(0, 1248, 1024, -1, 30, -1) -- Spiritual Echo, in combat buff
 	elseif e.signal == 9297052 then
 		e.self:RemoveAISpell(1248) -- Spiritual Echo
+    eq.set_timer('reflection_r')
 	elseif e.signal == 297141 then
 		e.self:ModifyNPCStat("mr", "236")
 		e.self:ModifyNPCStat("fr", "236")
@@ -183,10 +194,12 @@ function ACMSignal(e)
 		e.self:ModifyNPCStat("cr", "136")
 		e.self:ModifyNPCStat("pr", "136")
 		e.self:ModifyNPCStat("dr", "136")
+    eq.set_timer('resistance_r', 5* 60 * 1000)
 	elseif e.signal == 297191 then
 		e.self:AddAISpell(0, 1249, 1024, -1, 30, -1) -- Bristling Armament, in combat buff
 	elseif e.signal == 9297191 then
 		e.self:RemoveAISpell(1249) -- Bristling Armament
+    eq.set_timer('shielding_r', 5 * 60 * 1000)
 	end
 end
 
