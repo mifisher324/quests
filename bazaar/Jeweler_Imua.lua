@@ -81,8 +81,7 @@ function event_trade(e)
     [task_ids.viscous_mana] = {item1 = 10024, item2 = 16965, platinum = cost},
     [task_ids.cloudy_mana] = {item1 = 10028, item2 = 16965, platinum = cost},
     [task_ids.clear_mana] = {item1 = 10029, item2 = 16965, platinum = cost},
-    [task_ids.distilled_mana] = {item1 = 10034, item2 = 16965, platinum = cost},
-    [task_ids.purified_mana] = {item1 = 10035, item2 = 16965, platinum = cost},
+    [task_ids.distilled_mana] = {item1 = 10034, item2 = 10034, item3 = 16965, platinum = cost},
     [task_ids.imbued_opal] = {item1 = 10030, platinum = cost},
     [task_ids.imbued_topaz] = {item1 = 10025, platinum = cost},
     [task_ids.imbued_pebble] = {item1 = 12832, platinum = cost},
@@ -111,14 +110,15 @@ function event_trade(e)
     [task_ids.diamond_of_water] = {item1 = 29522, item2 = 15981, platinum = cost},
   };
 
-
-  for i=1, #task_list do
-    if e.other:IsTaskActive(task_list[i]) then
-      if item_lib.check_turn_in(e.trade, item_list[task_list[i]]) then
-        e.other:UpdateTaskActivity(task_list[i], 0, 1)
-        e.other:UpdateTaskActivity(task_list[i], 1, 1)
-        e.other:UpdateTaskActivity(task_list[i], 2, 1)
-      end
+  if e.other:IsTaskActive(task_ids.purified_mana) then
+    if item_lib.check_turn_in(e.trade, {item1 = 10035, item2 = 10035, item3 = 10035, item4 = 10035}) then
+      e.other:UpdateTaskActivity(task_ids.purified_mana, 0, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16965}) then
+      e.other:UpdateTaskActivity(task_ids.purified_mana, 1, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {platinum = cost}) then
+      e.other:UpdateTaskActivity(task_ids.purified_mana, 2, 1)
     end
   end
   
@@ -142,5 +142,18 @@ function event_trade(e)
       e.other:UpdateTaskActivity(task_ids.philter_of_trans, 5, 1)
     end
   end
+
+  for i=1, #task_list do
+    if not (task_list[i] == task_ids.purified_mana) then
+      if e.other:IsTaskActive(task_list[i]) then
+        if item_lib.check_turn_in(e.trade, item_list[task_list[i]]) then
+          e.other:UpdateTaskActivity(task_list[i], 0, 1)
+          e.other:UpdateTaskActivity(task_list[i], 1, 1)
+          e.other:UpdateTaskActivity(task_list[i], 2, 1)
+        end
+      end
+    end
+  end
+
   item_lib.return_items(e.self, e.other, e.trade)
 end
