@@ -38,7 +38,14 @@ task_list = {
   task_ids.diamond_of_war,
   task_ids.diamond_of_air,
   task_ids.diamond_of_fire,
-  task_ids.diamond_of_water,
+  task_ids.diamond_of_water
+}
+good_list = {
+  task_ids.rebreather,
+  task_ids.aqualung,
+  task_ids.clockwork_grease,
+  task_ids.wind_bow_cam,
+  task_ids.philter_of_trans
 };
 
 function say_price(e)
@@ -49,16 +56,17 @@ end
 
 function event_say(e)
   if e.message:findi('hail') then
-    e.other:Message(MT.NPCQuestSay, "Jeweler Imua says 'Greetings, " .. e.other:GetCleanName() ..".  I've had some time to practice my enchanting and can now provide some [" .. eq.say_link('enchanted goods') .. "].  If you would like for me to create one for you, just let me know.  I've also learned how to create [" .. eq.say_link('philter') .. "] of major translocation if you are interested.  If we've already discussed which item you would like to make, but you need me to remind you of the [" .. eq.say_link('price') .. "], I can.'")
+    e.other:Message(MT.NPCQuestSay, "Jeweler Imua says 'Greetings, " .. e.other:GetCleanName() ..".  I've had some time to practice my enchanting and can now make some enchanting [" .. eq.say_link('goods') .. "].  If you would like for me to make something for you, just let me know.  I've also gotten a line on some unusual tinkering and alchemy [" .. eq.say_link("items") .. "], if you're interested.  If we've already discussed which item you would like to make, but you need me to remind you of the [" .. eq.say_link('price') .. "], I can.'")
   end
-  if e.message:findi('enchanted goods') then
+  if e.message:findi('goods') then
     e.other:Message(MT.NPCQuestSay, "Jeweler Imua says 'Wonderful!  Just let me know which you would like, then bring me the materials and my payment.  Hmm, for one such as you...")
     say_price(e)
     e.other:TaskSelector(task_list)
   end
-  if e.message:findi('philter') then
-    e.other:Message(MT.NPCQuestSay, "Jeweler Imua nods.  'Of course, friend.  I just need you to bring me the materials.  Since there are quite a few of them, would you mind handing me each type of component individually, unstacked?  That way I can ensure I keep track of what you've provided.")
-    e.other:AssignTask(task_ids.philter_of_trans)
+  if e.message:findi('items') then
+    e.other:Message(MT.NPCQuestSay, "Jeweler Imua says 'Wonderful!  Just let me know which item you are interested in, then bring me the materials and the payment.  Hmm, for one such as you...")
+    say_price(e)
+    e.other:TaskSelector(good_list)
   end
   if e.message:findi('price') then
     say_price(e)
@@ -109,6 +117,60 @@ function event_trade(e)
     [task_ids.diamond_of_fire] = {item1 = 29521, item2 = 15981, platinum = cost},
     [task_ids.diamond_of_water] = {item1 = 29522, item2 = 15981, platinum = cost},
   };
+  local goods_list = {
+    [task_ids.clockwork_grease] = {item1 = 12564, item2 = 12564, item3 = 21347, platinum = cost},
+    [task_ids.wind_bow_cam] = {item1 = 30486, item2 = 30496, item3 = 30500, platinum = cost}
+  };
+
+  if e.other:IsTaskActive(task_ids.aqualung) then
+    if item_lib.check_turn_in(e.trade, {item1 = 13019}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 0, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16850}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 1, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16857}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 2, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16861}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 3, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16862}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 4, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16890}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 5, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {platinum = cost}) then
+      e.other:UpdateTaskActivity(task_ids.aqualung, 6, 1)
+    end
+    return
+  end
+
+  if e.other:IsTaskActive(task_ids.rebreather) then
+    if item_lib.check_turn_in(e.trade, {item1 = 4001}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 0, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16873}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 1, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16881}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 2, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16888}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 3, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16891}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 4, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {item1 = 16892}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 5, 1)
+    end
+    if item_lib.check_turn_in(e.trade, {platinum = cost}) then
+      e.other:UpdateTaskActivity(task_ids.rebreather, 6, 1)
+    end
+    return
+  end
 
   if e.other:IsTaskActive(task_ids.purified_mana) then
     if item_lib.check_turn_in(e.trade, {item1 = 10035, item2 = 10035, item3 = 10035, item4 = 10035}) then
@@ -120,6 +182,7 @@ function event_trade(e)
     if item_lib.check_turn_in(e.trade, {platinum = cost}) then
       e.other:UpdateTaskActivity(task_ids.purified_mana, 2, 1)
     end
+    return
   end
   
   if e.other:IsTaskActive(task_ids.philter_of_trans) then
@@ -141,19 +204,35 @@ function event_trade(e)
     if item_lib.check_turn_in(e.trade, {platinum = cost}) then
       e.other:UpdateTaskActivity(task_ids.philter_of_trans, 5, 1)
     end
+    return
   end
 
   for i=1, #task_list do
-    if not (task_list[i] == task_ids.purified_mana) then
+    if not (task_list[i] == task_ids.purified_mana) or not (task_list[i] == task_ids.rebreather) or not (task_list[i] == task_ids.aqualung) then
       if e.other:IsTaskActive(task_list[i]) then
         if item_lib.check_turn_in(e.trade, item_list[task_list[i]]) then
           e.other:UpdateTaskActivity(task_list[i], 0, 1)
           e.other:UpdateTaskActivity(task_list[i], 1, 1)
           e.other:UpdateTaskActivity(task_list[i], 2, 1)
+          return
         end
       end
     end
   end
+  for i=1, #good_list do
+    if not (good_list[i] == task_ids.purified_mana) or not (good_list[i] == task_ids.rebreather) or not (good_list[i] == task_ids.aqualung) then
+      if e.other:IsTaskActive(good_list[i]) then
+        if item_lib.check_turn_in(e.trade, goods_list[good_list[i]]) then
+          e.other:UpdateTaskActivity(good_list[i], 0, 1)
+          e.other:UpdateTaskActivity(good_list[i], 1, 1)
+          e.other:UpdateTaskActivity(good_list[i], 2, 1)
+          e.other:UpdateTaskActivity(good_list[i], 3, 1)
+        end
+        return
+      end
+    end
+  end
+
 
   item_lib.return_items(e.self, e.other, e.trade)
 end

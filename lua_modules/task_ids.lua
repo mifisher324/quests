@@ -66,7 +66,11 @@ task_ids = {
   diamond_of_air = 70,
   diamond_of_fire = 71,
   diamond_of_water = 72,
-  philter_of_trans = 73
+  philter_of_trans = 73,
+  rebreather = 74,
+  aqualung = 75,
+  clockwork_grease = 76,
+  wind_bow_cam = 77,
 };
 
 return task_ids
