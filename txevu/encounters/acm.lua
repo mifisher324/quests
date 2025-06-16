@@ -66,7 +66,7 @@ function ACMTimer(e)
 		eq.stop_timer("spawnevent")
 		eq.spawn_condition("txevu", instance_id, 3, 1) -- bearers and Mastruqs
   elseif e.timer == "absorbtion_r" then
-    eq.spawn2(
+    eq.spawn2(297173, 0, 0, 
 	end
 end
 
@@ -194,7 +194,7 @@ function ACMSignal(e)
 		e.self:ModifyNPCStat("cr", "136")
 		e.self:ModifyNPCStat("pr", "136")
 		e.self:ModifyNPCStat("dr", "136")
-    eq.set_timer('resistance_r', 5* 60 * 1000)
+    eq.set_timer('resistance_r', 5 * 60 * 1000)
 	elseif e.signal == 297191 then
 		e.self:AddAISpell(0, 1249, 1024, -1, 30, -1) -- Bristling Armament, in combat buff
 	elseif e.signal == 9297191 then
