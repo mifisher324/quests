@@ -27,6 +27,11 @@ local adds = false
 local combat = false
 local ae = false
 
+function chain_agro(e)
+  local target = eq.get_entity_list():GetRandomClient(e.self:GetX(), e.self:GetY(), e.self:GetZ(), 200 * 200)
+  e.self:AddToHateList(target, 1)
+end
+
 function pick_bearer(locs)
 	--Pick a random bearer
   local idx = math.random(#bearer_list)
@@ -86,8 +91,20 @@ function bearer_death(e)
   table.insert(bearer_list, e.self:GetNPCTypeID())
 end
 
-function handler_spawn(e)
-	eq.set_timer('leash', 3 * 1000)
+function handler_combat(e)
+  if e.joined then
+	  eq.set_timer('leash', 3 * 1000)
+    eq.signal(handler, 1)
+    eq.signal(matriarch, 10)
+  else
+    eq.stop_timer('leash')
+  end
+end
+
+function handler_signal(e)
+  if e.signal == 1 then
+    chain_agro(e)
+  end
 end
 
 function handler_death(e)
@@ -97,6 +114,7 @@ end
 function handler_timer(e)
 	if e.timer == 'leash' then
 		if e.self:GetX() >= 700 then
+      eq.debug('I am leashing')
 			e.self:GotoBind()
 			e.self:WipeHateList()
 		end
@@ -119,11 +137,12 @@ function matriarch_combat(e)
 			eq.set_timer('aoe', math.random(5, 60) * 1000)
 		end
 		eq.stop_timer("reset")
+    eq.signal(handler, 1)
 	else
 		combat = false
 		eq.stop_timer("hatchlings")
 		eq.stop_timer("aoe")
-		eq.set_timer("reset", 2 * 1000)
+		eq.set_timer("reset", 2 * 60 * 1000)
 	end
 end
 
@@ -171,7 +190,7 @@ function matriarch_timer(e)
 end
 
 function matriarch_signal(e)
-	local repop = 5 * 60 * 1000
+	local repop = 2 * 60 * 1000
 	if e.signal == 1 then
 		eq.set_timer('sw', repop)
 	elseif e.signal == 2 then
@@ -184,6 +203,8 @@ function matriarch_signal(e)
 		eq.set_timer('n', repop)
 	elseif e.signal == 6 then
 		eq.set_timer('ne', repop)
+  elseif e.signal == 10 then
+    chain_agro(e)
 	elseif e.signal == 297173 then
 		e.self:ModSkillDmgTaken(0, -75) -- 1h blunt
 		e.self:ModSkillDmgTaken(1, -75) -- 1h slashing
@@ -241,7 +262,7 @@ function matriarch_signal(e)
 	elseif e.signal == 297050 then
 		adds = true
 		if combat then
-			eq.set_timer("hatchling", 35000)
+			eq.set_timer("hatchling", 35 * 1000)
 		end
 	elseif e.signal == 1297050 then
 		adds = false
@@ -294,7 +315,8 @@ function event_encounter_load(e)
 	
 	eq.register_npc_event("acm", Event.timer, handler, handler_timer)
 	eq.register_npc_event("acm", Event.death, handler, handler_death)
-	eq.register_npc_event("acm", Event.spawn, handler, handler_spawn)
+  eq.register_npc_event("acm", Event.combat, handler, handler_combat)
+  eq.register_npc_event("acm", Event.signal, handler, handler_signal)
 	
 	for i = 1, #bearer_list do
 		eq.register_npc_event("acm", Event.death, bearer_list[i], bearer_death)
