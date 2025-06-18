@@ -1,206 +1,193 @@
---bloodfeaster event by Huffin
---an_ukun_mauler (297200)
---a_decaying_corpse (297073)
---#Ukun_Bloodfeaster (297082)
---#a_stonemite_corpseburrower (297207)
+--Ukun Bloodfeaster
+local bloodfeaster = 297082
+local mauler = 297200
+local stonemite = 297207
 
-local event_started = false
-local adds			= 0
-local instance_id	= eq.get_zone_instance_id();
+local adds = 0
 
-function Bloodfeaster_Spawn(e)
-	eq.spawn_condition("txevu", instance_id, 2, 1) --turn decaying corpse and ukun maulers on
-	event_started	= false
-	adds			= 0
-	--ukun mods
-	e.self:ModSkillDmgTaken(0, 10) -- 1h blunt
-	e.self:ModSkillDmgTaken(2, 10) -- 2h blunt
-	e.self:ModSkillDmgTaken(36, -10) -- piercing
-	e.self:ModSkillDmgTaken(77, -10) -- 2h piercing
-	e.self:ModSkillDmgTaken(28, 10) -- hand to hand
-	e.self:ModSkillDmgTaken(7, 10) -- archery
+function spawn_stonemites()
+	for i = 1, 10 do
+		if adds < 30 then
+			eq.spawn2(stonemite, 0, 0, 255.47, 431.62, -420.87, 0)
+			adds = adds + 1
+		end
+	end
 end
 
-function Bloodfeaster_Signal(e)
-	if e.signal == 1 then
-		if not event_started then
-			eq.signal(297200, 1) --remove immunities ukun mauler and move to main room
-			eq.signal(297073, 1) --remove immunities decaying corpse
-			eq.signal(297082, 2) --signal self to remove immunities and move to main room
 
-			eq.set_timer("reset", 45 * 60 * 1000) --45 min til event resets
-			eq.set_timer("adds", 30 * 1000) --30 sec between add waves
-			eq.start(78) --start grid
-			event_started = true
-		end
+function tether(e, force)
+	if force or e.self:GetY() < 242 or e.self:GetX() < 110 or e.self:GetX() > 340 then
+		e.self:CastSpell(3791, e.self:GetID())
+		e.self:GotoBind()
+		e.self:WipeHateList()
+	end
+end
+
+function chain_agro(e)
+	local target = eq.get_entity_list():GetRandomClient(e.self:GetX(), e.self:GetY(), e.self:GetZ(), 1000 * 1000)
+	e.self:AddToHateList(target, 1)
+end
+	
+
+function reset()
+	--Despawn everything except the bloodfeaster
+  eq.stop_all_timers()
+	eq.depop_all(stonemite)
+	eq.depop_all(mauler)
+	eq.signal(bloodfeaster, 1)
+end
+
+function init()
+	-- Respawn the maulers
+	eq.spawn2(297200, 0, 0, 261, 406, -420.02, 160)
+	eq.spawn2(297200, 0, 0, 232, 412, -419.9, 200)
+	eq.spawn2(297200, 0, 0, 241.56, 444.08, -420.77, 217.25)
+end
+
+function mauler_signal(e)
+	if e.signal == 2 then
+		chain_agro(e)
+	end
+end
+
+function mauler_combat(e)
+	if e.joined then
+		eq.stop_timer('reset')
+		eq.set_timer('tether', 3 * 1000)
+		eq.signal(bloodfeaster, 2)
+		eq.signal(stonemite, 2)
+		eq.signal(mauler, 2)
+	else
+		eq.stop_timer('tether')
+    if not eq.has_timer('reset') then
+		  eq.set_timer('reset', 2 * 60 * 1000)
+    end
+	end
+end
+
+function mauler_timer(e)
+	if e.timer == 'tether' then
+		tether(e, false)
+	elseif e.timer == 'reset' then
+    eq.stop_timer('reset')
+		reset()
+	end
+end
+
+function mauler_spawn(e)
+  e.self:SetSpecialAbility(24, 0)
+  e.self:SetSpecialAbility(35, 0)
+	e.self:ModSkillDmgTaken(0, 10)
+	e.self:ModSkillDmgTaken(2, 10)
+	e.self:ModSkillDmgTaken(36, -10)
+	e.self:ModSkillDmgTaken(77, -10)
+	e.self:ModSkillDmgTaken(28, 10)
+	e.self:ModSkillDmgTaken(7, 10)
+end
+
+function stonemite_combat(e)
+	if e.joined then
+		eq.stop_timer('reset')
+		eq.set_timer('tether', 3 * 1000)
+		eq.signal(bloodfeaster, 2)
+		eq.signal(stonemite, 2)
+		eq.signal(mauler, 2)
+	else
+	  if not eq.has_timer('reset') then
+	    eq.set_timer('reset', 2 * 60 * 1000)
+    end
+	end
+end
+
+function stonemite_timer(e)
+	if e.timer == 'tether' then
+		tether(e, false)
+	elseif e.timer == 'reset' then
+    eq.stop_timer('reset')
+		reset()
+	end
+end
+
+function stonemite_death(e)
+	adds = adds - 1
+end
+
+function stonemite_signal(e)
+	if e.signal == 2 then
+		chain_agro(e)
+	end
+end
+
+function stonemite_spawn(e)
+	chain_agro(e)
+end
+
+function bloodfeaster_spawn(e)
+	e.self:ModSkillDmgTaken(0, 10)
+	e.self:ModSkillDmgTaken(2, 10)
+	e.self:ModSkillDmgTaken(36, -10)
+	e.self:ModSkillDmgTaken(77, -10)
+	e.self:ModSkillDmgTaken(28, 10)
+	e.self:ModSkillDmgTaken(7, 10)
+end
+
+function bloodfeaster_signal(e)
+	if e.signal == 1 then
+		tether(e, true)
+		init()
 	elseif e.signal == 2 then
-		e.self:SetSpecialAbility(35, 0) --turn off immunity
-		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
-	elseif e.signal == 3 then
-		adds = adds + 1
-		-- eq.debug("stonemite adds spawned: " .. adds)
-	elseif e.signal == 4 then
-		adds = adds - 1
-		-- eq.debug("stonemite adds spawned: " .. adds)
+		chain_agro(e)
 	end
 end
 
-function Corpse_Signal(e)
-	if e.signal == 1 then
-		e.self:SetSpecialAbility(35, 0) --turn off immunity
-	elseif e.signal == 2 then
-		eq.spawn2(297207, 78, 0, e.self:GetX(), e.self:GetY(), e.self:GetZ(), e.self:GetHeading())
-		eq.spawn2(297207, 78, 0, e.self:GetX(), e.self:GetY(), e.self:GetZ(), e.self:GetHeading())
-	elseif e.signal == 3 then
-		e.self:SetSpecialAbility(35, 1) --turn on immunity
-	end
-end
-
-function Mauler_Combat(e)
+function bloodfeaster_combat(e)
 	if e.joined then
-		eq.set_timer("OOBcheck", 3 * 1000)
+		eq.stop_timer('reset')
+		eq.set_timer('tether', 3 * 1000)
+		eq.set_timer('mites',  30 * 1000)
+		eq.signal(bloodfeaster, 2)
+		eq.signal(stonemite, 2)
+		eq.signal(mauler, 2)
 	else
-		eq.stop_timer("OOBcheck")
+    eq.stop_timer('mites')
+	  if not eq.has_timer('reset') then
+	    eq.set_timer('reset', 2 * 60 * 1000)
+    end
 	end
 end
 
-function Mauler_Timer(e)
-	if e.timer == "OOBcheck" then
-		eq.stop_timer("OOBcheck")
-		if e.self:GetY() < 242 or e.self:GetX() < 110 or e.self:GetX() > 340 then
-			e.self:CastSpell(3791, e.self:GetID()) -- Spell: Ocean's Cleansing
-			e.self:GMMove(239, 316, -420, 0)
-			e.self:WipeHateList()
-		else
-			eq.set_timer("OOBcheck", 3 * 1000)
-		end
+function bloodfeaster_timer(e)
+	if e.timer == 'reset' then
+    eq.stop_timer('reset')
+		reset()
+	elseif e.timer == 'tether' then
+		tether(e, false)
+	elseif e.timer == 'mites' then
+		spawn_stonemites()
 	end
 end
 
-function Mauler_Signal(e)
-	if e.signal == 1 then
-		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
-		e.self:SetSpecialAbility(35, 0) --turn off immunity
-		eq.start(78) --start grid
-
-		--ukun mods
-		e.self:ModSkillDmgTaken(0, 10) -- 1h blunt
-		e.self:ModSkillDmgTaken(2, 10) -- 2h blunt
-		e.self:ModSkillDmgTaken(36, -10) -- piercing
-		e.self:ModSkillDmgTaken(77, -10) -- 2h piercing
-		e.self:ModSkillDmgTaken(28, 10) -- hand to hand
-		e.self:ModSkillDmgTaken(7, 10) -- archery
-	elseif e.signal == 3 then
-		eq.stop() --stop grid
-		e.self:SetSpecialAbility(24, 1) --turn on anti aggro
-		e.self:SetSpecialAbility(35, 1) --turn on immunity
-	end
-end
-
-function Stonemite_Combat(e)
-	if e.joined then
-		eq.set_timer("OOBcheck", 3 * 1000)
-	else
-		eq.stop_timer("OOBcheck")
-	end
-end
-
-function Stonemite_Timer(e)
-	if e.timer == "OOBcheck" then
-		eq.stop_timer("OOBcheck")
-		if e.self:GetY() < 242 or e.self:GetX() < 110 or e.self:GetX() > 340 then
-			e.self:CastSpell(3791, e.self:GetID()) -- Spell: Ocean's Cleansing
-			e.self:GMMove(239, 316, -420, 0)
-			e.self:WipeHateList()
-		else
-			eq.set_timer("OOBcheck", 3 * 1000)
-		end
-	end
-end
-
-function Stonemite_Spawn(e)
-	eq.signal(297082, 3) -- signal BF add to add counter
-end
-
-function Stonemite_Death(e)
-	eq.signal(297082, 4) -- signal BF subtract from add counter
-end
-
-function Bloodfeaster_Combat(e)
-	if e.joined then
-		eq.set_timer("OOBcheck", 3 * 1000)
-		if not eq.is_paused_timer("reset") then
-			eq.pause_timer("reset")
-		end
-	else
-		eq.resume_timer("reset")
-		eq.stop_timer("OOBcheck")
-	end
-end
-
-function Bloodfeaster_Death(e)
-	eq.spawn2(297074, 0, 0, 209, 456, -420, 0) --feaster (297074) will flip spawn condition off and depop adds
-	eq.signal(297140,297082); -- Add Lockout
-end
-
-function Controller_Spawn(e)
-	eq.set_timer("condition", 60 * 45 * 1000) --45 min til spawn condition turns off and adds depop
-end
-
-function Controller_Timer(e)
-	eq.spawn_condition("txevu", instance_id, 2, 0) --turn off decaying corpse and ukun maulers
-	eq.depop_all(297207) --#a_stonemite_corpseburrower (297207)
-	eq.stop_timer("condition")
-end
-
-function Bloodfeaster_Timer(e)
-	if e.timer == "reset" then
-		e.self:SetSpecialAbility(24, 1) --turn on anti aggro
-		e.self:SetSpecialAbility(35, 1) --turn on immunity
-		eq.signal(297200, 3) --event resetting add immunities
-		eq.signal(297073, 3) --event resetting add immunities
-		eq.depop_all(297207) --depop stonemites
-
-		eq.stop_timer("reset")
-		eq.stop_timer("adds")
-
-		eq.stop() --stop grid
-		adds = 0
-		event_started = false;
-	elseif e.timer == "adds" then
-		if adds < 36 then
-			eq.signal(297073, 2) --signal decaying corpse spawn adds
-		end
-	elseif e.timer == "OOBcheck" then
-		eq.stop_timer("OOBcheck")
-		if e.self:GetY() < 242 or e.self:GetX() < 110 or e.self:GetX() > 340 then
-			e.self:CastSpell(3791, e.self:GetID()) -- Spell: Ocean's Cleansing
-			e.self:GMMove(239, 316, -420, 0)
-			e.self:WipeHateList()
-		else
-			eq.set_timer("OOBcheck", 3 * 1000)
-		end
-	end
+function bloodfeaster_death(e)
+	reset()
 end
 
 function event_encounter_load(e)
-	eq.register_npc_event("bloodfeaster", Event.spawn, 297082, Bloodfeaster_Spawn)
-	eq.register_npc_event("bloodfeaster", Event.timer, 297082, Bloodfeaster_Timer)
-	eq.register_npc_event("bloodfeaster", Event.signal, 297082, Bloodfeaster_Signal)
-	eq.register_npc_event("bloodfeaster", Event.combat, 297082, Bloodfeaster_Combat)
-	eq.register_npc_event("bloodfeaster", Event.death_complete, 297082, Bloodfeaster_Death)
-
-	eq.register_npc_event("bloodfeaster", Event.timer, 297200, Mauler_Timer)
-	eq.register_npc_event("bloodfeaster", Event.signal, 297200, Mauler_Signal)
-	eq.register_npc_event("bloodfeaster", Event.combat, 297200, Mauler_Combat)
-
-	eq.register_npc_event("bloodfeaster", Event.timer, 297207, Stonemite_Timer)
-	eq.register_npc_event("bloodfeaster", Event.combat, 297207, Stonemite_Combat)
-	eq.register_npc_event("bloodfeaster", Event.spawn, 297207, Stonemite_Spawn)
-	eq.register_npc_event("bloodfeaster", Event.death_complete, 297207, Stonemite_Death)
-
-	eq.register_npc_event("bloodfeaster", Event.signal, 297073, Corpse_Signal)
-
-	eq.register_npc_event("bloodfeaster", Event.spawn, 297074, Controller_Spawn)
-	eq.register_npc_event("bloodfeaster", Event.timer, 297074, Controller_Timer)
+	eq.register_npc_event("bloodfeaster", Event.death_complete, bloodfeaster, bloodfeaster_death)
+	eq.register_npc_event("bloodfeaster", Event.timer, bloodfeaster, bloodfeaster_timer)
+	eq.register_npc_event("bloodfeaster", Event.combat, bloodfeaster, bloodfeaster_combat)
+	eq.register_npc_event("bloodfeaster", Event.signal, bloodfeaster, bloodfeaster_signal)
+	eq.register_npc_event("bloodfeaster", Event.spawn, bloodfeaster, bloodfeaster_spawn)
+	
+	eq.register_npc_event("bloodfeaster", Event.death_complete, stonemite, stonemite_death)
+	eq.register_npc_event("bloodfeaster", Event.timer, stonemite, stonemite_timer)
+	eq.register_npc_event("bloodfeaster", Event.combat, stonemite, stonemite_combat)
+	eq.register_npc_event("bloodfeaster", Event.signal, stonemite, stonemite_signal)
+	eq.register_npc_event("bloodfeaster", Event.spawn, stonemite, stonemite_spawn)
+	
+	eq.register_npc_event("bloodfeaster", Event.spawn, mauler, mauler_spawn)
+	eq.register_npc_event("bloodfeaster", Event.timer, mauler, mauler_timer)
+	eq.register_npc_event("bloodfeaster", Event.combat, mauler, mauler_combat)
+	eq.register_npc_event("bloodfeaster", Event.signal, mauler, mauler_signal)
+	
+	reset()
 end

@@ -114,7 +114,6 @@ end
 function handler_timer(e)
 	if e.timer == 'leash' then
 		if e.self:GetX() >= 700 then
-      eq.debug('I am leashing')
 			e.self:GotoBind()
 			e.self:WipeHateList()
 		end

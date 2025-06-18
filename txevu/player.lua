@@ -19,11 +19,7 @@ function event_click_door(e)
 	local door_id = e.door:GetDoorID();
 	local entity_list = eq.get_entity_list();
 
-	if door_id == 55 then -- Bloodfeaster
-		if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297082) then
-			eq.signal(297082,1); --signal Bloodfeaster to initiate sequence
-		end
-	elseif door_id == 23 then -- Zun Statue
+	if door_id == 23 then -- Zun Statue
 		if e.self:GetInventory():HasItem(64034, 1, 32) == Slot.Cursor then 
 			if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297150) then 
 				if not is_gm and e.self:GetGroupMemberCount() < 1 then
