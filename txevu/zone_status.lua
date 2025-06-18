@@ -75,10 +75,3 @@ function AddLockout(lockout)
         expedition:AddLockout(lockout_name, lockout_duration)
     end
 end
-
-function event_signal(e)
-    -- eq.debug("signal: " .. e.signal);
-    if Txevu_Lockouts[e.signal] ~= nil then
-        AddLockout(Txevu_Lockouts[e.signal]);
-    end
-end
