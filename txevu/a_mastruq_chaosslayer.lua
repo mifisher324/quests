@@ -20,3 +20,7 @@ function event_timer(e)
 		end
 	end
 end
+
+function event_death_complete(e)
+  eq.signal(297150, 100)
+end

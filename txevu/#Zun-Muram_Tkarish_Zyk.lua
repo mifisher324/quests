@@ -2,6 +2,20 @@
 
 local init_engage	= false
 
+function event_signal(e)
+  if e.signal == 100 then
+    eq.set_timer('vuln', 30 * 1000)
+    e.self:Emote(' staggers as his link to discord is severed.  Strike now!')
+    eq.ZoneMarquee(MT.Yellow, 255, 1000, 2000, 6000, "Zun'muram Tkarish Zyk staggers as his link to discord is severed!")
+    e.self:SetSpecialAbility(22, 0)
+    e.self:ModifyNPCStat("mr", "200")
+    e.self:ModifyNPCStat("pr", "200")
+    e.self:ModifyNPCStat("dr", "200")
+    e.self:ModifyNPCStat("cr", "200")
+    e.self:ModifyNPCStat("fr", "200")
+  end
+end
+
 function event_spawn(e)
 	init_engage = false
 	spawn_event()
@@ -53,6 +67,16 @@ function event_timer(e)
 			eq.spawn2(eq.ChooseRandom(297159, 297161, 297161, 297222, 297222, 297223, 297134),0,0,1305, 27, -304, 0):AddToHateList(e.self:GetHateTop(),1) -- North
 			eq.set_timer("ritualist_adds_1", 2 * 60 * 1000); -- 2 minute timer
 		end
+  elseif e.timer == 'vuln' then
+    eq.stop_timer('vuln')
+    e.self:Emote(' grins as his discordant energy returns, rendering him immune to your strikes.')
+    eq.ZoneMarquee(MT.Yellow, 255, 1000, 2000, 6000, "Zun'muram Tkarish Zyk grins as his discordant energy returns!")
+    e.self:SetSpecialAbility(22, 1)
+    e.self:ModifyNPCStat("mr", "1000")
+    e.self:ModifyNPCStat("pr", "1000")
+    e.self:ModifyNPCStat("dr", "1000")
+    e.self:ModifyNPCStat("cr", "1000")
+    e.self:ModifyNPCStat("fr", "1000")
 	elseif e.timer == "ritualist_adds_2" then -- East
 		eq.stop_timer(e.timer);
 		if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297077) then

@@ -101,6 +101,20 @@ function Raziya_Death(e)
 	eq.spawn2(297217, 76, 0, e.self:GetX(), e.self:GetY(), e.self:GetZ(), e.self:GetHeading())
 end
 
+function shade_death(e)
+  eq.signal(297218, 10)
+end
+
+function shade_five_death(e)
+  eq.signal(297218, 11)
+end
+
+function chain_agro(e)
+  local target = eq.get_entity_list():GetRandomClient(e.self:GetX(), e.self:GetY(), e.self:GetZ(), 1000 * 1000)
+	e.self:AddToHateList(target, 1)
+end
+
+
 --Shade_of_a_Vrex_Invoker (297213) on grid 73
 function Shadeone_Spawn(e)
 	eq.set_timer("progress", 5 * 1000)
@@ -114,12 +128,10 @@ end
 function Shadeone_Signal(e)
 	if e.signal == 1 then --getting absorbed
 		e.self:Say("High Priest, may my everlasting soul provide you with the strength to cleanse this temple!")
-		e.self:Emote("dissolves into tendrils of ghostly vapor that reach out and replenish the strength of High Priest Nkosi Bakari.")
-		eq.depop()
-	elseif e.signal == 2 then
 		e.self:SetSpecialAbility(25, 0) --turn off immune to aggro
 		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
 		e.self:SetSpecialAbility(35, 0) --turn off immunity
+    chain_agro(e)
 	end
 end
 
@@ -172,12 +184,10 @@ end
 function Shadetwo_Signal(e)
 	if e.signal == 1 then --getting absorbed
 		e.self:Say("High Priest, may my everlasting soul provide you with the strength to cleanse this temple!")
-		e.self:Emote("dissolves into tendrils of ghostly vapor that reach out and replenish the strength of High Priest Nkosi Bakari.")
-		eq.depop()
-	elseif e.signal == 2 then
 		e.self:SetSpecialAbility(25, 0) --turn off immune to aggro
 		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
 		e.self:SetSpecialAbility(35, 0) --turn off immunity
+    chain_agro(e)
 	end
 end
 
@@ -230,12 +240,10 @@ end
 function Shadethree_Signal(e)
 	if e.signal == 1 then --getting absorbed
 		e.self:Say("High Priest, may my everlasting soul provide you with the strength to cleanse this temple!")
-		e.self:Emote("dissolves into tendrils of ghostly vapor that reach out and replenish the strength of High Priest Nkosi Bakari.")
-		eq.depop()
-	elseif e.signal == 2 then
 		e.self:SetSpecialAbility(25, 0) --turn off immune to aggro
 		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
 		e.self:SetSpecialAbility(35, 0) --turn off immunity
+    chain_agro(e)
 	end
 end
 
@@ -288,12 +296,10 @@ end
 function Shadefour_Signal(e)
 	if e.signal == 1 then --getting absorbed
 		e.self:Say("High Priest, may my everlasting soul provide you with the strength to cleanse this temple!")
-		e.self:Emote("dissolves into tendrils of ghostly vapor that reach out and replenish the strength of High Priest Nkosi Bakari.")
-		eq.depop()
-	elseif e.signal == 2 then
 		e.self:SetSpecialAbility(25, 0) --turn off immune to aggro
 		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
 		e.self:SetSpecialAbility(35, 0) --turn off immunity
+    chain_agro(e)
 	end
 end
 
@@ -345,12 +351,10 @@ end
 function Shadefive_Signal(e)
 	if e.signal == 1 then --getting absorbed
 		e.self:Say("High Priest, may my everlasting soul provide you with the strength to cleanse this temple!")
-		e.self:Emote("dissolves into tendrils of ghostly vapor that reach out and replenish the strength of High Priest Nkosi Bakari.")
-		eq.depop()
-	elseif e.signal == 2 then
 		e.self:SetSpecialAbility(25, 0) --turn off immune to aggro
 		e.self:SetSpecialAbility(24, 0) --turn off anti aggro
 		e.self:SetSpecialAbility(35, 0) --turn off immunity
+    chain_agro(e)
 	end
 end
 
@@ -418,58 +422,49 @@ function HP_Spawn(e)
 		450,
 		"My brothers and sisters, I have heard your calls and I have come.  If what you say is true, our children have turned their backs upon Trushar and in doing so have invited evil upon our land.  We must cleanse this place and restore belief to our people!"
 	)
-	eq.set_next_hp_event(50)
+	eq.set_next_hp_event(90)
 end
 
 function HP_Health(e)
-	if e.hp_event == 50 then
-		if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297213) then
-			eq.signal(297213, 1, 10) --absorb first add
-			e.self:SetHP(e.self:GetMaxHP())
-			eq.set_next_hp_event(50)
-			eq.GM_Message(MT.LightBlue, "absorb first add")
-		end
+	if e.hp_event == 90 then
+		eq.signal(297213, 1, 10) --tell first add to assist
+    e.self:SetSpecialAbility(35, 1)
+		eq.set_next_hp_event(75)
+	end
 
-		if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297213) then
-			if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297214) then
-				eq.signal(297214, 1, 10) --absorb second add
-				e.self:SetHP(e.self:GetMaxHP())
-				eq.set_next_hp_event(50)
-				eq.GM_Message(MT.LightBlue, "absorb second add")
-			end
-		end
+  if e.hp_event == 75 then
+	  eq.signal(297214, 1, 10) --tell second add to assist
+    e.self:SetSpecialAbility(35, 1)
+		eq.set_next_hp_event(60)
+	end
 
-		if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297213) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297214) then
-			if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297215) then
-				eq.signal(297215, 1, 10) --absorb third add
-				e.self:SetHP(e.self:GetMaxHP())
-				eq.set_next_hp_event(50)
-				eq.GM_Message(MT.LightBlue, "absorb third add")
-			end
-		end
-
-		if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297213) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297214) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297215) then
-			if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297216) then
-				eq.signal(297216, 1, 10) --absorb fourth add
-				e.self:SetHP(e.self:GetMaxHP())
-				eq.set_next_hp_event(50)
-				eq.GM_Message(MT.LightBlue, "absorb fourth add")
-			end
-		end
-
-		if not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297213) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297214) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297215) and not eq.get_entity_list():IsMobSpawnedByNpcTypeID(297216) then
-			if eq.get_entity_list():IsMobSpawnedByNpcTypeID(297217) then
-				eq.signal(297217, 1, 10) --absorb fifth add
-				e.self:SetHP(e.self:GetMaxHP())
-				eq.set_next_hp_event(50)
-				eq.GM_Message(MT.LightBlue, "absorb fifth add")
-			end
-		end
+  if e.hp_event == 60 then
+	  eq.signal(297215, 1, 10) --tell third add to assist
+    e.self:SetSpecialAbility(35, 1)
+		eq.set_next_hp_event(45)
+	end
+  
+  if e.hp_event == 45 then
+	  eq.signal(297216, 1, 10) --absorb fourth add
+    e.self:SetSpecialAbility(35, 1)
+		eq.set_next_hp_event(30)
+	end
+  
+  if e.hp_event == 30 then
+	  eq.signal(297217, 1, 10) --absorb fifth add
+    e.self:SetSpecialAbility(35, 1)
 	end
 end
 
 function HP_Signal(e)
-	absorbed = absorbed + 1 --from the death of a shade
+  if e.signal == 10 then
+    e.self:SetSpecialAbility(35, 0)
+  end
+  if e.signal == 11 then
+    e.self:SetSpecialAbility(35, 0)
+    e.self:ModifyNPCStat("min_hit", tostring(e.self:GetNPCStat("min_hit") * 1.1))
+    e.self:ModifyNPCStat("max_hit", tostring(e.self:GetNPCStat("max_hit") * 1.1))
+  end
 end
 
 function HP_Death(e)
@@ -490,30 +485,35 @@ function event_encounter_load(e)
 	eq.register_npc_event("highpriest", Event.spawn, 297217, Shadefive_Spawn)
 	eq.register_npc_event("highpriest", Event.timer, 297217, Shadefive_Timer)
 	eq.register_npc_event("highpriest", Event.waypoint_arrive, 297217, Shadefive_Arrive)
+  eq.register_npc_event("highpriest", Event.death_complete, 297217, shade_five_death)
 
 	eq.register_npc_event("highpriest", Event.combat, 297216, Shadefour_Combat)
 	eq.register_npc_event("highpriest", Event.signal, 297216, Shadefour_Signal)
 	eq.register_npc_event("highpriest", Event.spawn, 297216, Shadefour_Spawn)
 	eq.register_npc_event("highpriest", Event.timer, 297216, Shadefour_Timer)
 	eq.register_npc_event("highpriest", Event.waypoint_arrive, 297216, Shadefour_Arrive)
+  eq.register_npc_event("highpriest", Event.death_complete, 297216, shade_death)
 
 	eq.register_npc_event("highpriest", Event.combat, 297215, Shadethree_Combat)
 	eq.register_npc_event("highpriest", Event.signal, 297215, Shadethree_Signal)
 	eq.register_npc_event("highpriest", Event.spawn, 297215, Shadethree_Spawn)
 	eq.register_npc_event("highpriest", Event.timer, 297215, Shadethree_Timer)
 	eq.register_npc_event("highpriest", Event.waypoint_arrive, 297215, Shadethree_Arrive)
+  eq.register_npc_event("highpriest", Event.death_complete, 297215, shade_death)
 
 	eq.register_npc_event("highpriest", Event.combat, 297214, Shadetwo_Combat)
 	eq.register_npc_event("highpriest", Event.signal, 297214, Shadetwo_Signal)
 	eq.register_npc_event("highpriest", Event.spawn, 297214, Shadetwo_Spawn)
 	eq.register_npc_event("highpriest", Event.timer, 297214, Shadetwo_Timer)
 	eq.register_npc_event("highpriest", Event.waypoint_arrive, 297214, Shadetwo_Arrive)
+  eq.register_npc_event("highpriest", Event.death_complete, 297214, shade_death)
 
 	eq.register_npc_event("highpriest", Event.combat, 297213, Shadeone_Combat)
 	eq.register_npc_event("highpriest", Event.signal, 297213, Shadeone_Signal)
 	eq.register_npc_event("highpriest", Event.spawn, 297213, Shadeone_Spawn)
 	eq.register_npc_event("highpriest", Event.timer, 297213, Shadeone_Timer)
 	eq.register_npc_event("highpriest", Event.waypoint_arrive, 297213, Shadeone_Arrive)
+  eq.register_npc_event("highpriest", Event.death_complete, 297213, shade_death)
 
 	eq.register_npc_event("highpriest", Event.signal, 297212, Trigger_Signal)
 	eq.register_npc_event("highpriest", Event.spawn, 297212, Trigger_Spawn)
