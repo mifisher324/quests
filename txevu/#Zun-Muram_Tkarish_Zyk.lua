@@ -121,7 +121,3 @@ function spawn_event()
 	eq.spawn2(297148,0,0,1528, 30, -285, 384);
 	eq.spawn2(297149,0,0,1528, -30, -285, 384);
 end
-
-function event_death_complete(e)
-	eq.signal(297140,297150); -- Add Lockout
-end
