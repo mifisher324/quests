@@ -39,6 +39,7 @@ function ZMMD_Inactivate(e)
 	e.self:SetAppearance(3);
 	e.self:WipeHateList();
 	e.self:SetOOCRegen(0);
+  e.self:BuffFadeAll()
 end
 
 function ZMMD_Timer(e)

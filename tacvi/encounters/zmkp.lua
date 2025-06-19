@@ -110,6 +110,7 @@ function ZMKP_Timer(e)
 			eq.signal(298128, 2); -- NPC: #Balance_of_Rage
 		else
 			e.self:ProcessSpecialAbilities(ZMKP_Active);
+      e.self:SetSpecialAbility(35, 0)
 			target_hp = target_hp - 10;
 			eq.set_next_hp_event(target_hp);
 		end
@@ -142,6 +143,8 @@ function ZMKP_Hp(e)
 		e.self:ProcessSpecialAbilities(ZMKP_Inactive);
 		e.self:SetOOCRegen(0);
 		e.self:WipeHateList();
+    e.self:SetSpecialAbility(35, 1)
+    e.self:BuffFadeAll()
 
 		eq.signal(298125, 2); -- NPC: #Balance_of_Speed
 		eq.signal(298126, 2); -- NPC: #Balance_of_Defense
@@ -187,7 +190,7 @@ function ZMKP_Signal_Balance(e)
 		e.self:WipeHateList();
 
 		-- lets double check
-		if e.self:GetHPRatio() <= (target_hp - 3) then
+		if e.self:GetHPRatio() <= (target_hp - 20) then --Changed from 3%
 			local id = e.self:GetNPCTypeID();
 			if id == 298125 then
 				speed_balanced = false;
