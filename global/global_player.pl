@@ -373,6 +373,24 @@ our %CYCLE_ITEM_MAP = (
     2017818 => 2017731,
 );
 
+sub check_map {
+    my ($spell_map_ref, $ret_item) = @_;
+    my $playerClassBitmask = $client->GetClassesBitmask();
+    foreach my $array_ref (@$spell_map_ref) {
+         if ($playerClassBitmask & $array_ref->[0]) {
+	     if (!$client->HasSpellScribed($array_ref->[2]) && !$client->HasDisciplineLearned($array_ref->[2])) {
+	         push(@task_ids, $array_ref->[1]);
+	     }
+         }
+    }
+    if (scalar @task_ids > 0) {
+        $client->TaskSelectorNoCooldown(@task_ids);
+    } else {
+        $client->SummonItem($ret_item);
+	$client->Message(15, "You have already learned everything you can from this rune.");
+    }
+}
+
 sub EVENT_ITEM_CLICK_CAST_CLIENT {
     if (plugin::CustomEventItemClickCastEntry()) {
         return;
@@ -381,15 +399,102 @@ sub EVENT_ITEM_CLICK_CAST_CLIENT {
     if ($spell_id == 36878) {
         if (plugin::HasTitle($item_id)) {
             $client->Message(289, "You already have that title, and cannot claim it again.");
-            return 1;
-        }
-        plugin::AddTitleFlag($item_id, $client);
+        } else {
+            plugin::AddTitleFlag($item_id, $client);
+	}
     }
-
-    my $swapped = plugin::transform_item($client, $item_id, $slot_id, \%SWAP_ITEM_MAP, 0);
+    elsif ($spell_id == 36874) {
+    	my $swapped = plugin::transform_item($client, $item_id, $slot_id, \%SWAP_ITEM_MAP, 0);
     
-    if (!$swapped && $spell_id == 36874) {
-        plugin::transform_item($client, $item_id, $slot_id, \%CYCLE_ITEM_MAP, 1);
+    	if (!$swapped && $spell_id == 36874) {
+        	plugin::transform_item($client, $item_id, $slot_id, \%CYCLE_ITEM_MAP, 1);
+    	}
+    }
+    elsif ($spell_id == 36936) {
+        @task_ids = ();
+	my @spell_map = ([128, 78, 4872],
+			 [16384, 79, 4875],
+			 [32768, 80, 5031],
+			 [2, 81, 4882],
+			 [32, 82, 4884],
+			 [8192, 83, 4878],
+			 [4096, 84, 4886],
+			 [64, 85, 5019],
+			 [1024, 86, 4889],
+			 [4, 87, 4893],
+			 [8, 88, 4897],
+			 [256, 89, 5017],
+			 [16, 90, 4903],
+			 [512, 91, 4899],
+			 [1, 92, 5015],
+			 [2048, 93, 4906]);
+        $ret_id = 59906;
+        check_map(\@spell_map, $ret_id); 
+    }
+    elsif ($spell_id == 36937) {
+        @task_ids = ();
+	my @spell_map = ([128, 94, 4873],
+			 [16384, 95, 4876],
+			 [2, 96, 4881],
+			 [32, 97, 4885],
+			 [8192, 110, 4879],
+			 [4096, 111, 4888],
+			 [1024, 112, 4891],
+			 [4, 113, 4895],
+			 [8, 114, 4898],
+			 [16, 115, 4904],
+			 [512, 116, 4901],
+			 [2048, 117, 4907]);
+	$ret_id = 59975;
+        check_map(\@spell_map, $ret_id);
+    }
+    elsif ($spell_id == 36938) {
+        @task_ids = ();
+	my @spell_map = ([128, 118, 4871],
+			 [16384, 119, 4874],
+			 [2, 120, 4880],
+			 [32, 121, 4883],
+			 [8192, 122, 4877],
+			 [4096, 123, 4887],
+			 [1024, 124, 4890],
+			 [4, 125, 4894],
+			 [8, 126, 4896],
+			 [16, 127, 4902],
+			 [512, 128, 4900],
+			 [2048, 129, 4905]);
+	$ret_id = 59974;
+        check_map(\@spell_map, $ret_id);
+    }
+    elsif ($spell_id == 36939) {
+        @task_ids = ();
+	my @spell_map = ([128, 130, 4971],
+			 [16384, 131, 4972],
+			 [32768, 132, 5032],
+			 [2, 133, 4973],
+			 [32, 134, 4974],
+			 [8192, 135, 4975],
+			 [4096, 136, 4976],
+			 [64, 137, 5020],
+			 [1024, 138, 4978],
+			 [4, 139, 4977],
+			 [8, 140, 4980],
+			 [256, 157, 5018],
+			 [16, 141, 4982],
+			 [512, 142, 4979],
+			 [1, 155, 5016],
+			 [2048, 156, 5018]);
+	$ret_id = 59907;
+        check_map(\@spell_map, $ret_id);
+    }
+}
+
+sub EVENT_TASKACCEPTED {
+    my @god_spell_tasks = (78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
+	    		   110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
+			   126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141,
+			   142, 155, 156, 157);
+    if (grep { $_ == $task_id } @god_spell_tasks) {
+        $client->UpdateTaskActivity($task_id, 0, 1);
     }
 }
 
