@@ -28,7 +28,7 @@ local transcend_info = {
 }
 
 function event_say(e)
-  if e.other:IsTaskCompleted(task_ids.trusik_task) then
+  if e.other:IsTaskCompleted(task_ids.trusik_task) or e.other:GetGM() then
     if e.message:findi("hail") then
       e.other:Message(MT.NPCQuestSay, "Tublik Narwether says 'Hello again, " .. e.other:GetCleanName() .. "!  You've done great things here in Kod'taz to combat both the Trusik and the Muramites, but I suspect your journey is not yet complete.  If you wish to enter the [" .. eq.say_link("Sanctuary of the Righteous") .. "], the [" .. eq.say_link("Sanctuary of the Glorified") .. "], or the [" .. eq.say_link("Sanctuary of the Transcendent") .. "] again, just say so!'")
     end
